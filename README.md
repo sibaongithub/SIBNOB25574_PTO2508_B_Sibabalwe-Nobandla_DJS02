@@ -1,64 +1,103 @@
 # DJS02 – Web Component: Podcast Preview
 
 ## Overview
+This project turns the podcast preview into a reusable **Web Component** called
+`<podcast-preview>`. It's built with native JavaScript (no frameworks), uses the
+**Shadow DOM** so its styles stay encapsulated, and stays **stateless** — it only
+shows the data the parent gives it. When clicked, it fires a custom event so the
+parent app can open a modal, without the component knowing how the modal works.
 
-In this project, you will build a reusable and encapsulated **custom HTML element** that displays a podcast preview. The component must follow the **Web Component standard**, using `customElements.define()` and should work independently from the main application logic. This component will enhance modularity, promote reuse, and reduce code duplication across the app.
-
-The component should be designed to **accept podcast data via attributes or properties**, display relevant UI elements (such as title, cover image, and genres), and **communicate with the main application** through custom events.
-
----
-
-## Core Objectives
-
-### Web Component Functionality
-
-- Create a **custom HTML element** using `customElements.define()`.
-- Accept data (cover image, title, genres, number of seasons, and last updated date) **as attributes or properties**.
-- Keep the component **stateless** and reliant on external data provided by the parent.
-- Use **Shadow DOM** for style and logic encapsulation to avoid global conflicts.
-- Trigger a **custom event** when a user interacts with the component (e.g., clicking), so that the parent application can open a modal or take other actions without tightly coupling to the component’s logic.
+The genre and sort dropdowns from the previous project are kept and still work.
 
 ---
 
-## UI/UX Requirements
-
-- The component should render a clean and **visually consistent preview** of each podcast.
-- Display:
-  - Podcast **cover image**
-  - Podcast **title**
-  - **Genre names**
-  - **Number of seasons**
-  - **Last updated** in a human-readable format
-- The component must be **responsive**, and match the overall app design on desktop and mobile.
-- On click, the component must notify the parent app to **open a modal** or navigate to details.
-
----
-
-## Code Quality & Maintainability
-
-- Write clear, consistent, and modular code.
-- Follow **functional and object-oriented programming** patterns.
-- Document major functions using **JSDoc comments** (parameters, return types, etc.).
-- Use consistent **code formatting** across HTML, CSS, and JavaScript.
+## Project Structure
+```
+DJS02/
+├── index.html              the demo page
+├── styles.css              styles for the demo page (the component styles itself)
+└── src/
+    ├── index.js            starts the app (wiring + first render)
+    ├── data.js             the podcast data
+    ├── utils.js            small shared helpers (genre names, dates, seasons)
+    ├── components/
+    │   ├── PodcastPreview.js   the Web Component
+    │   └── createModal.js      opens/closes the detail modal
+    └── views/
+        ├── createGrid.js       renders the <podcast-preview> components
+        └── createFilters.js    the genre + sort dropdowns
+```
 
 ---
 
-## Technical Constraints
+## How to Run
+1. Keep all the files in the same folder structure above.
+2. Open `index.html` with the **Live Server** extension in VS Code
+   (it uses ES modules, so opening the file directly won't load the imports).
 
-- Do **not** use any third-party frameworks for creating the web component.
-- Use **native JavaScript (ES6+)**, HTML, and CSS.
-- No page reloads or navigation.
-- Ensure compatibility with modern browsers.
+---
+
+## How to Register the Component
+The component registers itself at the bottom of `PodcastPreview.js`:
+
+```js
+customElements.define("podcast-preview", PodcastPreview);
+```
+
+So you just import the file once and the `<podcast-preview>` tag is available:
+
+```js
+import "./components/PodcastPreview.js";
+```
+
+---
+
+## How to Pass Data
+**With the `.data` property (used in this project):**
+```js
+const card = document.createElement("podcast-preview");
+card.data = {
+  id: "10716",
+  title: "Something Was Wrong",
+  seasons: 14,
+  genres: ["Personal Growth", "Investigative Journalism"], // names, not ids
+  updated: "2022-11-03T07:00:00.000Z",
+  image: "https://..."   // optional – falls back to a grey placeholder
+};
+document.body.appendChild(card);
+```
+
+**Or with attributes in HTML:**
+```html
+<podcast-preview
+  podcast-id="10716"
+  title="Something Was Wrong"
+  seasons="14"
+  genres="Personal Growth,Investigative Journalism"
+  updated="2022-11-03T07:00:00.000Z">
+</podcast-preview>
+```
+
+> The component takes genre **names**. In `createGrid.js` the genre ids from
+> `data.js` are turned into names before being passed in, which keeps the
+> component simple and stateless.
+
+---
+
+## How to Listen for Interaction Events
+When a card is clicked (or Enter/Space is pressed on it), it fires a
+**`podcast-selected`** event. It bubbles and is `composed`, so it crosses the
+Shadow DOM and you can listen for it on a parent. The `detail` carries the `id`:
+
+```js
+grid.addEventListener("podcast-selected", (event) => {
+  createModal.open(event.detail.id); // the parent decides what happens
+});
+```
 
 ---
 
 ## Deliverables
-
-- A working custom Web Component file (e.g., `PodcastPreview.js`).
-- An HTML demo page showcasing the component usage.
-- A `README.md` file with:
-  - How to use and register the component
-  - Instructions for passing data
-  - How to listen for interaction events
-
----
+- A working Web Component (`src/components/PodcastPreview.js`).
+- An HTML demo page showcasing it (`index.html`).
+- This `README.md` with usage, data passing, and event instructions.

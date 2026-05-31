@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PodcastApp – Web Component</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <!-- Navbar -->
+    <header class="navbar">
+      <div class="brand">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/><circle cx="12" cy="10" r="3"/>
+          <path d="M7 20.662V19a5 5 0 0 1 10 0v1.662"/>
+        </svg>
+        PodcastApp
+      </div>
+      <div class="nav-actions">
+        <button aria-label="Search" class="icon-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="m21 21-4.35-4.35"/>
+          </svg>
+        </button>
+        <div class="avatar" role="img" aria-label="Account"></div>
+      </div>
+    </header>
+
+    <main>
+      <!-- Filters (genre + sort) -->
+      <div class="filters">
+        <span class="filters-label">Filter by:</span>
+        <select id="genreFilter">
+          <option value="all">All Genres</option>
+        </select>
+        <select id="sortFilter">
+          <option value="updated">Recently Updated</option>
+          <option value="popular">Most Popular</option>
+          <option value="newest">Newest</option>
+        </select>
+      </div>
+
+      <!-- Grid of <podcast-preview> components -->
+      <div id="grid" class="grid"></div>
+    </main>
+
+    <!-- Modal (opened when a component fires its event) -->
+    <div id="modal" class="modal hidden">
+      <div class="modal-box">
+        <div class="modal-head">
+          <h2 id="mTitle"></h2>
+          <button id="mClose" class="close-btn" aria-label="Close">&times;</button>
+        </div>
+        <div class="modal-top">
+          <div class="modal-cover">Large Cover Image</div>
+          <div class="modal-info">
+            <h3>Description</h3>
+            <p id="mDesc"></p>
+            <h3>Genres</h3>
+            <div id="mGenres" class="modal-tags"></div>
+            <p id="mUpdated" class="modal-updated"></p>
+          </div>
+        </div>
+        <h3 class="seasons-head">Seasons</h3>
+        <div id="mSeasons" class="season-list"></div>
+      </div>
+    </div>
+
+    <script type="module" src="./src/index.js"></script>
+  </body>
+</html>
