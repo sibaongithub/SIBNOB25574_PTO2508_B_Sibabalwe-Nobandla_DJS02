@@ -4,10 +4,22 @@
 This project turns the podcast preview into a reusable **Web Component** called
 `<podcast-preview>`. It's built with native JavaScript (no frameworks), uses the
 **Shadow DOM** so its styles stay encapsulated, and stays **stateless** — it only
-shows the data the parent gives it. When clicked, it fires a custom event so the
-parent app can open a modal, without the component knowing how the modal works.
+shows the data the parent gives it. When a card is clicked it fires a custom
+event so the parent app can open a modal, without the component knowing how the
+modal works.
 
 The genre and sort dropdowns from the previous project are kept and still work.
+
+---
+
+## What It Does
+- Shows a grid of podcast previews, each one a `<podcast-preview>` component.
+- Each preview shows the cover (grey placeholder), title, number of seasons,
+  genre names, and the last updated date.
+- Clicking a preview opens a modal with the full details: description, genres,
+  last updated date, and the list of seasons with episode counts.
+- The modal closes with the **×** button, clicking outside it, or the **Escape** key.
+- **Filter by genre** and **sort** (Recently Updated, Most Popular, Newest) both work.
 
 ---
 
@@ -31,9 +43,15 @@ DJS02/
 ---
 
 ## How to Run
-1. Keep all the files in the same folder structure above.
-2. Open `index.html` with the **Live Server** extension in VS Code
-   (it uses ES modules, so opening the file directly won't load the imports).
+Because it uses ES modules, it needs to be served (not opened by double-clicking).
+
+1. Keep the files in the structure above.
+2. In VS Code, right-click `index.html` (inside the `DJS02` folder) →
+   **Open with Live Server**.
+
+> If the grid is empty, open the browser Console (right-click → Inspect → Console).
+> A 404 on `src/index.js` means the `src/` folder isn't sitting next to
+> `index.html` in the folder being served.
 
 ---
 
@@ -101,3 +119,4 @@ grid.addEventListener("podcast-selected", (event) => {
 - A working Web Component (`src/components/PodcastPreview.js`).
 - An HTML demo page showcasing it (`index.html`).
 - This `README.md` with usage, data passing, and event instructions.
+Same structure as before, just updated to match the final modular 
